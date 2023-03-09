@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:include="common.html :: source"></th:block>
+<!--    <script type="text/javascript" src="/js/productKillDetail.js"></script>-->
+<!--    <script type="text/javascript" src="/js/layui.js"></script>-->
+    <script type="text/javascript" th:src="@{/js/jquery-1.8.3.min.js}"></script>
+<!--    <link rel="stylesheet" href="./static/layer/css/lay.css" />-->
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <style type="text/css">
+        #buyButton{
+            background-color:red;
+            border:none;
+            color:white;
+            padding:12px;
+            text-align:center;
+            font-size:16px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+
+<th:block th:include="common.html :: header"></th:block>
+<th:block th:include="common.html :: category" ></th:block>
+
+<div class="i_bg">
+    <div class="postion">
+    </div>
+    <div class="content" style="margin-left: 390px">
+        <div id="tsShopContainer" style="float:left;">
+            <div id="tsImgS">
+                <img th:src="'/images/'+${product.fileName}" width="390" height="390" style="border:1px solid #EAEAEA;"/>
+            </div>
+        </div>
+        <div class="pro_des">
+            <div class="des_name">
+                <input type="hidden" value="1"  name="entityId" class="n_ipt"/>
+                <p th:text="${product.name}"></p>
+                “开业巨惠，北京专柜直供”，不光低价，“真”才靠谱！
+            </div>
+            <div class="des_price">
+                本店价格：<b th:text="${product.price}"></b><br/>
+            </div>
+            <div class="des_price">
+                库存：<b id="stock" th:text="${product.stock}"></b><br/>
+            </div>
+            <div class="des_choice">
+                <span class="fl">型号选择：</span>
+                <ul>
+                    <li class="type checked">30ml
+                        <div class="ch_img"></div>
+                    </li>
+                    <li class="type">50ml
+                        <div class="ch_img"></div>
+                    </li>
+                    <li class="type">100ml
+                        <div class="ch_img"></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="des_choice">
+                <span class="fl">颜色选择：</span>
+                <ul>
+                    <li class="color">红色
+                        <div class="ch_img"></div>
+                    </li>
+                    <li class="color checked">白色
+                        <div class="ch_img"></div>
+                    </li>
+                    <li class="color">黑色
+                        <div class="ch_img"></div>
+                    </li>
+                </ul>
+            </div>
+            <br>
+            <div th:text="'秒杀开始时间: '+${#dates.format(seckillTime.startDate,'yyyy-MM-dd HH:mm:ss')}"></div>
+            <div id="seckillTip">
+                <input type="hidden" id="remainSeconds" th:value="${remainSeconds}">
+                <span th:if="${seckillStatus eq 0}">秒杀倒计时: <span id="countDown" th:text="${remainSeconds}"></span>秒</span>
+                <span th:if="${seckillStatus eq 1}">秒杀进行中</span>
+                <span th:if="${seckillStatus eq 2}">秒杀已结束</span>
+            </div>
+            <br>
+<!--            <div class="des_join">-->
+<!--                <div class="j_nums">-->
+<!--                    <input type="text" id="quantity"   value="1"  name="quantity" class="n_ipt"/>-->
+<!--&lt;!&ndash;                    <input type="button" value="" onclick="increase()" class="n_btn_1"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="button" value="" onclick="reduce()" class="n_btn_2"/>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <input type="hidden" id="productId" value="1">-->
+<!--                <input type="hidden" id="productPrice" value="1">-->
+<!--                <form id="secKillForm" method="post" action="/seckill/doSeckill">-->
+<!--                    <input type="hidden" name="productId" th:value="${product.id}">-->
+                    <button class="btn btn-primary" type="button" id="buyButton" onclick="doSeckill()">立即秒杀
+                        <input type="hidden" id="productId" name="productId" th:value="${product.id}">
+                    </button>
+                     <!--<img src="/images/j_car.png" th:onclick="'addCart('+${product.id}+','+${product.price}+')'"/>-->
+<!--                </form>-->
+<!--            </div>-->
+        </div>
+    </div>
+    <div class="content mar_20">
+        <div id="favoriteList">
+        </div>
+        <div class="l_list">
+            <div class="des_border">
+                <div class="des_tit">
+                    <ul>
+                        <li class="current"><a href="#p_attribute">商品属性</a></li>
+                        <li><a href="#p_details">商品详情</a></li>
+                    </ul>
+                </div>
+                <div class="des_con" id="p_attribute">
+                    <table border="0" align="center" style="width:100%; font-family:'宋体'; margin:10px auto;"
+                           cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td th:text="'商品名称:'+${product.name}"></td>
+                            <td th:text="'商品价格:'+${product.price}"></td>
+                            <td>品牌:手机</td>
+                            <td>上架时间:2021-01-01 09:19:09 </td>
+                        </tr>
+                        <tr>
+                            <td>商品毛重：160.00g</td>
+                            <td>商品产地：法国</td>
+                            <td>香调：果香调香型：淡香水/香露EDT</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>容量：1ml-15ml </td>
+                            <td>类型：女士香水，Q版香水，组合套装</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="des_border" id="p_details">
+                <div class="des_t">商品详情</div>
+                <div class="des_con">
+                    <table border="0" align="center" style="width:745px; font-size:14px; font-family:'宋体';" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td th:text="${product.description}"></td>
+                        </tr>
+                    </table>
+                    <p align="center">
+                        <img th:src="'/images/'+${product.fileName}" width="185" height="155">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="common.html :: footer"></th:block>
+<th:block th:include="common.html :: permit"></th:block>
+
+<!--</body>-->
+<!--<script type="text/javascript" src="/js/layui.js"></script>-->
+<!--<script type="text/javascript" src="/js/layui.js"></script>-->
+<script>
+    $(function(){
+        //给type绑定点击事件
+        $(".type").click(function () {
+            var index = $(".type").index(this);
+            var obj = $(".type").eq(index);
+            $(".type").removeClass("checked");
+            obj.addClass("checked");
+        });
+        //给color绑定点击事件
+        $(".color").click(function () {
+            var index = $(".color").index(this);
+            var obj = $(".color").eq(index);
+            $(".color").removeClass("checked");
+            obj.addClass("checked");
+        });
+        countDown();
+    });
+
+    // function increase(){
+    //     let quantity = $("#quantity").val();
+    //     let stockStr = $("#stock").text();
+    //     let stock = parseInt(stockStr);
+    //     if(quantity < stock){
+    //         quantity++;
+    //     }
+    //     $("#quantity").val(quantity);
+    // }
+    //
+    // function reduce() {
+    //     let quantity = $("#quantity").val();
+    //     if(quantity > 1){
+    //         quantity--;
+    //     }
+    //     $("#quantity").val(quantity);
+    // }
+    //
+    // //添加购物车
+    // function addCart(productId,price){
+    //     let stockStr = $("#stock").text();
+    //     let stock = parseInt(stockStr);
+    //     if(stock == 0){
+    //         alert("库存不足！");
+    //         return false;
+    //     }
+    //     let quantity = $("#quantity").val();
+    //     window.location.href="/cart/add/"+productId+"/"+price+"/"+quantity;
+    // }
+
+    function countDown() {
+        var remainSeconds = $("#remainSeconds").val();
+        var timeout;
+        if (remainSeconds>0){
+            $("#buyButton").attr("disabled",true);
+            document.getElementById("buyButton").style.backgroundColor="#CDCDCD";
+            timeout = setTimeout(function () {
+                $("#countDown").text(remainSeconds-1);
+                $("#remainSeconds").val(remainSeconds-1);
+                countDown();
+            },1000);
+        } else if (remainSeconds==0){
+            $("#buyButton").attr("disabled",false);
+            document.getElementById("buyButton").style.backgroundColor="red";
+            if (timeout){
+                clearTimeout(timeout);
+            }
+            $("#seckillTip").html("秒杀进行中");
+        }else {
+            $("#buyButton").attr("disabled",true);
+            document.getElementById("buyButton").style.backgroundColor="#CDCDCD";
+            $("#seckillTip").html("秒杀已经结束");
+        }
+    }
+
+    function doSeckill() {
+        $.ajax({
+            url:'/seckill/doSeckill',
+            type:'POST',
+            data:{
+                productId:$("#productId").val()
+            },
+            success:function (data) {
+                if(data.code==200){
+                    getResult($("#productId").val());
+                }else {
+                    layer.msg(data.message);
+                    // layui.use('layer', function(){
+                    //     var layer = layui.layer;
+                    //
+                    //     layer.msg('data.message');
+                    // });
+                }
+            },
+            error:function () {
+                layer.msg("客户端请求错误");
+                // layui.use('layer', function(){
+                //     var layer = layui.layer;
+                //
+                //     layer.msg('客户端请求错误');
+                // });
+            }
+        })
+    }
+    function getResult(productId) {
+        g_showLoading();
+        $.ajax({
+            url:"/seckill/result",
+            type:"GET",
+            data:{
+                productId:productId,
+            },
+            success:function (data) {
+                if (data.code==200){
+                    var result = data.obj;
+                    if(result<0){
+                        layer.msg("对不起，秒杀失败!");
+                        // layui.use('layer', function(){
+                        //     var layer = layui.layer;
+                        //
+                        //     layer.msg('对不起，秒杀失败');
+                        // });
+                    }else if(result==0){
+                        setTimeout(function () {
+                            getResult(productId);
+                        },50);
+                    }else {
+                        layer.confirm("恭喜您，秒杀成功！查看购物车?",{btn:["确定","取消"]},
+                            function(){
+                                window.location.href="/cart/get/";
+                            },
+                            function () {
+                                layer.close();
+                            })
+                        // layui.use('layer', function(){
+                        //     var layer = layui.layer;
+                        //     layer.confirm("恭喜您，秒杀成功！查看购物车?",{btn:["确定","取消"]},
+                        //         function(){
+                        //             window.location.href="/cart/get/";
+                        //         },
+                        //         function () {
+                        //             layer.close();
+                        //         })
+                        //
+                        // });
+                    }
+                }
+            },
+            error:function () {
+                layer.msg('客户端请求错误');
+            }
+        })
+    }
+    function g_showLoading() {
+        var idx = layer.msg('处理中...',{icon:16,shade:[0.5, '#f5f5f5'],scrollbar:false,offset:'0px',time:100000});
+        return idx;
+    }
+</script>
+</body>
+</html>
